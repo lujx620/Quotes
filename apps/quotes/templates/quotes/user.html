@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Quotes</title>
+  </head>
+  <body>
+    <p><a href='{% url "quotes:index" %}'> Dashboard </a> |
+    <a href= '{% url "log_reg:logout" %}'> Logout </a> </p>
+
+    <h3> Posts by: {{postee.name}} </h3>
+    {% for x in count %}
+    <h3> Count: {{ x.num_count }}</h3>
+      {% endfor %}
+    {% for item in quotes %}
+    <p>{{item.quoter}}:{{item.content}} </p>
+    {% endfor %}
+  </body>
+</html>

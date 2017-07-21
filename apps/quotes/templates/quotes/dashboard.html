@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Quotes</title>
+  </head>
+  <body>
+    <h1> Welcome, {{ user.name }}!</h1>
+    <a href='{% url "log_reg:logout" %}'>Log Out</a>
+
+    <fieldset>
+      <legend>Quotable Quotes</legend>
+      {% for item in quotes %}
+          <p>{{item.quoter}}: {{item.content}}</p>
+          <p>Posted by:<a href='{% url "quotes:users" item.user.id %}'> {{item.user.name}}</a></p>
+          <form action='{% url "quotes:favorites" id=item.id %}' method='post'>
+          {% csrf_token %}
+          <input type='submit' value='Add to my List'>
+        </form>
+    {% endfor %}
+    </fieldset>
+<!-- #################################################### -->
+    <fieldset>
+      <legend>Your Favorites </legend>
+      {% for quote in fave_quotes %}
+        <p>{{quote.quoter}}: {{quote.content}}</p>
+        <p>Posted by:<a href='{% url "quotes:users" id=quote.id %}'> {{quote.user.name}}</a></p>
+        <form action='{% url "quotes:remove" id=quote.id %}' method='post'>
+        {% csrf_token %}
+      <input type='submit' value='Remove From My List'>
+      </form>
+      {% endfor %}
+    </fieldset>
+<!-- ################################################## -->
+    <fieldset>
+      <legend> Contribute a Quote </legend>
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} {{message.tags}} {% endif %}> {{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      <form action='{% url "quotes:q_process" %}' method='post'>
+        {% csrf_token %}
+      <p>Quoted by: <input type='text' name='quoter'></p>
+      <p> Message:</p>
+      <textarea name='content'></textarea>
+      <input type='submit' value='Submit'>
+    </fieldset>
+  </body>
+</html>
